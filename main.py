@@ -1,8 +1,8 @@
 
 import pygame
 import sys
-
-import self
+import random
+#import self
 
 pygame.init()
 window = pygame.display.set_mode((0,0))
@@ -27,10 +27,10 @@ class Rocket:
         if keys [pygame.K_LEFT]:
             self.hitbox.x -= self.speed
         if keys[pygame.K_x]:
-            self.bullets.append(Bullet(10,
-                                       10, 10,
+            self.bullets.append(Bullet(5,
+                                       50, 55,
                                        self.hitbox.x, self.hitbox.y,
-                                       "bullet.png"))
+                                       "png-klev-club-ab03-p-solo-shd-png-9.png"))
 
         for bullet in self.bullets:
             bullet.move()
@@ -40,21 +40,28 @@ class Rocket:
         for bullet in self.bullets:
             bullet.draw(window)
 class UFO:
-    def __init__(self,speed, width , height, x, y, skin):
-        self.texture = pygame.image.load(skin)
+    def __init__(self, speed, width, height, x, y, filename):
+        self.texture = pygame.image.load(filename)
         self.texture = pygame.transform.scale(self.texture, [width, height])
         self.hitbox = self.texture.get_rect()
         self.hitbox.x = x
         self.hitbox.y = y
+        self.speed = speed
+
     def draw(self, window):
         window.blit(self.texture, self.hitbox)
+
+    def move(self):
+        self.hitbox.y += self.speed
+
 class Asteroid:
-    def _init__(self,speed,width,height,x ,y, skin):
-        self.texture = pygame.image.load(skin)
+    def __init__(self, filename, width, height, x, y, speed):
+        self.texture = pygame.image.load(filename)
         self.texture = pygame.transform.scale(self.texture, [width, height])
+        self.hitbox = self.texture.get_rect()
         self.hitbox.x = x
         self.hitbox.y = y
-    def draw(self, window):
+        self.speed = speed
         window.blit(self.texture, self.hitbox)
 
 
@@ -86,53 +93,28 @@ class Bullet:
 
 
 
-UFOs = [
-     UFO(1, 100,100,100, 100,"ufo.png"),
-     UFO(1, 100,100,200, 100,"ufo.png"),
-     UFO(1, 100,100,300, 100,"ufo.png"),
-     UFO(1, 100,100,400, 100,"ufo.png"),
-     UFO(1, 100,100,500, 100,"ufo.png"),
-     UFO(1, 100,100,600, 100,"ufo.png"),
-     UFO(1, 100,100,700, 100,"ufo.png"),
-     UFO(1, 100,100,800, 100,"ufo.png"),
-     UFO(1, 100,100,900, 100,"ufo.png"),
-     UFO(1, 100,100,1000, 100,"ufo.png"),
-     UFO(1, 100,100,1100, 100,"ufo.png"),
-     UFO(1, 100,100,100, 100,"ufo.png"),
-     UFO(1, 100,100,1100, 100,"ufo.png"),
-     UFO(1, 100,100,1200, 100,"ufo.png"),
-     UFO(1, 100,100,1300, 100,"ufo.png"),
-
-     UFO(1, 100, 100, 200, 200, "ufo.png"),
-     UFO(1, 100, 100, 300, 200, "ufo.png"),
-     UFO(1, 100, 100, 400, 200, "ufo.png"),
-     UFO(1, 100, 100, 500, 200, "ufo.png"),
-     UFO(1, 100, 100, 600, 200, "ufo.png"),
-     UFO(1, 100, 100, 700, 200, "ufo.png"),
-     UFO(1, 100, 100, 800, 200, "ufo.png"),
-     UFO(1, 100, 100, 900, 200, "ufo.png"),
-     UFO(1, 100, 100, 1000, 200, "ufo.png"),
-     UFO(1, 100, 100, 1100, 200, "ufo.png"),
-     UFO(1, 100, 100, 100, 200, "ufo.png"),
-     UFO(1, 100, 100, 1100, 200, "ufo.png"),
-     UFO(1, 100, 100, 1200, 200, "ufo.png"),
-     UFO(1, 100, 100, 1300, 200, "ufo.png"),
-]
-#asteroids = [
-    #Asteroid( 3 , 120, 120, 100, 1200,  "asteroid.png"),
 
 
 
-#]
+UFOs = []
+y = 200
+for i in range(10):
+    UFOs.append(UFO(5, 50, 50, random.randint(0, 650), y, "png-klev-club-ay9g-p-solo-shd-png-29.png"))
+    y -= 100
 
+y = 200
+for i in range(10):
+    UFOs.append(UFO(5, 50, 50, random.randint(0, 650), y, "png-klev-club-d05q-p-edgar-bravo-stars-png-14.png"))
+    y -= 100
 
-
+score = 0
+score_lbl = pygame.font.Font(None, 23).render("Score: " + str(score), True, [0,0,0])
 
 fps = pygame.time.Clock()
-player = Rocket(3, 50, 125, 350, 250, "rocket.png")
+player = Rocket(3, 50, 125, 650, 450, "png-klev-club-a6lo-p-kolt-bravo-stars-png-28.png")
 
 
-background = pygame.image.load('galaxy.jpg')
+background = pygame.image.load('png-klev-club-appf-p-solo-shd-png-20.png')
 background = pygame.transform.scale(background, window.get_size())
 
 
@@ -143,21 +125,36 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-    player.move()
-    if event.type == pygame.KEYDOWN and event.key == pygame.K_F11:
-        pygame.display.toggle_fullscreen()
-    if event.type == pygame.KEYDOWN:
-        if event.key == pygame.K_ESCAPE:
-            pygame.quit()
 
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_F11:
+            pygame.display.toggle_fullscreen()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                pygame.quit()
+    player.move()
+    for e in UFOs:
+        e.move()
+        if e.hitbox.y > 1080:
+            e.hitbox.y = -100
+            e.hitbox.x = random.randint(0, 1920)
+
+    for e in UFOs:
+        for b in player.bullets:
+            if e.hitbox.colliderect(b.hitbox):
+                b.hitbox.x = 5000
+                player.bullets.remove(b)
+                e.hitbox.y = -100
+                e.hitbox.x = random.randint(0, 1920)
+                score += 1
+                break
+    score_lbl = pygame.font.Font(None, 23).render("Score: " + str(score), True, [0, 0, 0])
 
     window.fill([255, 255, 255])
     window.blit(background, [0, 0])
     player.draw(window)
     for ufo in UFOs:
         ufo.draw(window)
-    #for asteroid in Asteroids:
-        #asteroid.draw(window)
+
 
 
     pygame.display.flip()
