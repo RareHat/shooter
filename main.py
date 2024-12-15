@@ -99,7 +99,7 @@ class Bullet:
 UFOs = []
 y = 200
 for i in range(10):
-    UFOs.append(UFO(5, 50, 50, random.randint(0, 650), y, "png-klev-club-ay9g-p-solo-shd-png-29.png"))
+    UFOs.append(UFO(5, 50, 50, random.randint(0, 650), y, "png-klev-club-ab03-p-solo-shd-png-9.png"))
     y -= 100
 
 y = 200
