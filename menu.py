@@ -1,21 +1,27 @@
 from PyQt5.QtWidgets import *
 
+import main
+
+app = QApplication([])
+window = QWidget()
 
 
-
-window.show()
-app.exec()
 
 play_btn = QPushButton("Почати Гру")
 settings_btn = QPushButton("Налаштування")
 shop_btn = QPushButton("Магазин")
 levels = QPushButton("Рівні")
 
+play_btn.clicked.connect(main.game)
+
+
+
 main_line = QVBoxLayout()
-main_line.AddWidget(play_btn)
-main_line.AddWidget(settings_btn)
-main_line.AddWidget(shop_btn)
-main_line.AddWidget(levels)
+main_line.addWidget(play_btn)
+main_line.addWidget(settings_btn)
+main_line.addWidget(shop_btn)
+main_line.addWidget(levels)
+window.setLayout(main_line)
 
 
 
@@ -31,6 +37,6 @@ main_line.AddWidget(levels)
 
 
 
+window.show()
+app.exec()
 
-app = QApplication([])
-window = QWidget()

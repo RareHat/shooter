@@ -1,3 +1,6 @@
+from file_helper13 import read_from_file, write_in_file
+
+
 def game():
     import pygame
     import sys
@@ -27,7 +30,7 @@ def game():
             if keys [pygame.K_LEFT]:
                 self.hitbox.x -= self.speed
             if keys[pygame.K_x]:
-                self.bullets.append(Bullet(5,
+                self.bullets.append(Bullet(15,
                                            50, 55,
                                            self.hitbox.x, self.hitbox.y,
                                            "png-klev-club-ab03-p-solo-shd-png-9.png"))
@@ -101,7 +104,10 @@ def game():
     for i in range(10):
         UFOs.append(UFO(5, 120, 150, random.randint(0, 650), y, "png-klev-club-8zaz-p-bravo-stars-bull-png-6.png"))
         y -= 100
-
+    data = read_from_file()
+    score = data["score"]
+    write_in_file(data)
+    score_lbl = pygame.font.Font(None, 23).render
     y = 200
     for i in range(10):
         UFOs.append(UFO(5, 120, 150, random.randint(0, 650), y, "png-klev-club-d05q-p-edgar-bravo-stars-png-14.png"))
@@ -125,12 +131,14 @@ def game():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+                return
 
             if event.type == pygame.KEYDOWN and event.key == pygame.K_F11:
                 pygame.display.toggle_fullscreen()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
+                    return
         player.move()
         for e in UFOs:
             e.move()
@@ -159,4 +167,3 @@ def game():
 
         pygame.display.flip()
         fps.tick(60)
-game()
